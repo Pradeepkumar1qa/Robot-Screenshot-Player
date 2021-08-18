@@ -20,7 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "robot-screentshot-player"},
-    packages=setuptools.find_packages(where="robot-screentshot-player"),
+    package_dir={"": "robotscreenshotplayer"},
+    packages=setuptools.find_packages(where="robotscreentshotplayer"),
     python_requires=">=3.6",
 )
