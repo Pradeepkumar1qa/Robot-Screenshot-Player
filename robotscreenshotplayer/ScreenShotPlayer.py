@@ -10,25 +10,29 @@ class ScreenShotPlayer(object):
     counter = 0
     previous_suite_name = ''
     project_execution_dir = ''
-    ScreenShotPlayerReportDir=''
+    ScreenShotPlayerReportDir=None
 
     def __init__(self,whereToSaveReportDir=None):
         if whereToSaveReportDir:
-            ScreenShotPlayer.whereToSaveReportDir=whereToSaveReportDir
+            ScreenShotPlayer.ScreenShotPlayerReportDir=whereToSaveReportDir
      
 
     @staticmethod
     def start_suite(name, attributes):
         ScreenShotPlayer.sc_index = 1
         ScreenShotPlayer.project_execution_dir = BuiltIn().get_variable_value("${EXECDIR}")
+        if ScreenShotPlayer.ScreenShotPlayerReportDir==None:
+            ScreenShotPlayer.ScreenShotPlayerReportDir=os.path.join(ScreenShotPlayer.project_execution_dir,'screenShotplayer')
 
     
     @staticmethod
     def start_keyword(name, attributes):
+       
         seleniumlib = BuiltIn().get_library_instance('SeleniumLibrary')
         suite_source = BuiltIn().get_variable_value("${SUITE SOURCE}")
         suite_name = suite_source.rsplit('\\')[-1].replace('.robot', '').strip()
-        seleniumlib.capture_page_screenshot('screen_shot/{}/{}-{}.png'.format(suite_name, suite_name, ScreenShotPlayer.sc_index))
+        seleniumlib.capture_page_screenshot('{}/{}/{}-{}.png'.format(ScreenShotPlayer.ScreenShotPlayerReportDir,suite_name, suite_name, ScreenShotPlayer.sc_index))
+        # print('{}/{}/{}-{}.png'.format(ScreenShotPlayer.ScreenShotPlayerReportDir,suite_name, suite_name, ScreenShotPlayer.sc_index))
         ScreenShotPlayer.sc_index = ScreenShotPlayer.sc_index+1
       
 
@@ -83,11 +87,13 @@ class ScreenShotPlayer(object):
     @staticmethod
     def generateScreenShotPlayerResource(data):
         
-        path_of_screen_shot_player= ScreenShotPlayer.whereToSaveReportDir if ScreenShotPlayer.whereToSaveReportDir  else ScreenShotPlayer.previous_suite_name
-        path_of_screen_shot_player=os.path.join(path_of_screen_shot_player,'screenShotplayer')
+        path_of_screen_shot_player= ScreenShotPlayer.ScreenShotPlayerReportDir
         
-        rmtree(path_of_screen_shot_player)
-        os.makedirs(path_of_screen_shot_player)
+        
+        # if os.path.isdir(path_of_screen_shot_player):
+        #     rmtree(path_of_screen_shot_player)
+        if  not (os.path.isdir(path_of_screen_shot_player)):
+            os.makedirs(path_of_screen_shot_player)
         
         test_str = ScreenShotPlayer.getHTMLTemplate();
         
@@ -97,10 +103,10 @@ class ScreenShotPlayer(object):
         
         #copy data file from resource data file
         with open(os.path.join(path_of_screen_shot_player,'data.js'), 'w') as f:
-            f.write(data)
+            f.write('image_json_container1={}'.format(data))
         
 
-        resource_dir=__file__.replace('startKeyword.py','resource')
+        resource_dir=__file__.replace('ScreenShotPlayer.py','resource')
         copyfile(os.path.join(resource_dir,'style.css'),os.path.join(path_of_screen_shot_player,'style.css'))
         copyfile(os.path.join(resource_dir,'controller.js'),os.path.join(path_of_screen_shot_player,'controller.js'))
 
@@ -119,8 +125,8 @@ class ScreenShotPlayer(object):
         image_container = {}
         key = 0
 
-        for root, dirs, files in os.walk(os.path.join('report', 'result', 'screen_shot')):
-            if(len(files) == 0):
+        for root, dirs, files in os.walk(ScreenShotPlayer.ScreenShotPlayerReportDir):
+            if(root==ScreenShotPlayer.ScreenShotPlayerReportDir):
                 continue
             image_container[str(key)] = [root, files]
             key = key+1
@@ -130,10 +136,9 @@ class ScreenShotPlayer(object):
         for key, value in image_container.items():
             image_container[key][1] = sorted(
                 image_container[key][1], key=custom_sort)
-        # print(image_container)
-       
+        print(image_container)
+        ScreenShotPlayer.generateScreenShotPlayerResource(str(image_container))
         
         print("robot-screenShotplayer completed successfully")
 
 
-ScreenShotPlayer('./dummytest').generateScreenShotPlayerResource("A")

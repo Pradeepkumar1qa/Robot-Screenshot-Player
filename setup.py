@@ -21,6 +21,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     package_dir={"": "robotscreenshotplayer"},
-    packages=setuptools.find_packages(where="robotscreentshotplayer"),
+    packages=setuptools.find_packages(where="robotscreenshotplayer"),
     python_requires=">=3.6",
 )
