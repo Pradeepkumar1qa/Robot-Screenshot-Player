@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="robot-screenshot-player",
-    version="0.0.3",
+    version="0.0.4",
     author="pradeep kumar",
     author_email="pradeepkmr838@gmail.com",
     description="utility for playing all the screentshot captured during robot execution",
@@ -20,6 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    keywords=['robot-framework','video-player','automation','screenshot-player'],
     package_dir={"": "robotscreenshotplayer"},
     py_modules=['ScreenShotPlayer'],
     packages=setuptools.find_packages(where="robotscreenshotplayer"),

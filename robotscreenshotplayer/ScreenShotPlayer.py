@@ -11,18 +11,21 @@ class ScreenShotPlayer(object):
     previous_suite_name = ''
     project_execution_dir = ''
     ScreenShotPlayerReportDir=None
+    whereToSaveReportDirRelativePath=None
 
     def __init__(self,whereToSaveReportDir=None):
         if whereToSaveReportDir:
-            ScreenShotPlayer.ScreenShotPlayerReportDir=whereToSaveReportDir
-     
+            ScreenShotPlayer.whereToSaveReportDirRelativePath=whereToSaveReportDir
+           
 
     @staticmethod
     def start_suite(name, attributes):
         ScreenShotPlayer.sc_index = 1
         ScreenShotPlayer.project_execution_dir = BuiltIn().get_variable_value("${EXECDIR}")
-        if ScreenShotPlayer.ScreenShotPlayerReportDir==None:
+        if ScreenShotPlayer.whereToSaveReportDirRelativePath==None:
             ScreenShotPlayer.ScreenShotPlayerReportDir=os.path.join(ScreenShotPlayer.project_execution_dir,'screenShotplayer')
+        else:
+             ScreenShotPlayer.ScreenShotPlayerReportDir=os.path.join(ScreenShotPlayer.project_execution_dir,ScreenShotPlayer.whereToSaveReportDirRelativePath,'screenShotplayer')
 
     
     @staticmethod
@@ -95,7 +98,7 @@ class ScreenShotPlayer(object):
         if  not (os.path.isdir(path_of_screen_shot_player)):
             os.makedirs(path_of_screen_shot_player)
         
-        test_str = ScreenShotPlayer.getHTMLTemplate();
+        test_str = ScreenShotPlayer.getHTMLTemplate()
         
         #generated html file
         with open(os.path.join(path_of_screen_shot_player,'ScreenShotPlayer.html'), 'w') as f:
@@ -136,9 +139,9 @@ class ScreenShotPlayer(object):
         for key, value in image_container.items():
             image_container[key][1] = sorted(
                 image_container[key][1], key=custom_sort)
-        print(image_container)
+        # print(image_container)
         ScreenShotPlayer.generateScreenShotPlayerResource(str(image_container))
         
-        print("robot-screenShotplayer completed successfully")
+        print("[robot-screenshot-player]:report saved at location:\t{}/{}".format(ScreenShotPlayer.ScreenShotPlayerReportDir,'ScreenShotPlayer.html'))
 
 
