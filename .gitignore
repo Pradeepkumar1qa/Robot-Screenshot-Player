@@ -1,3 +1,5 @@
 test/**
 dist
 **/__pycache__/**
+**/robotscreenshotplayer/robot_screenshot_player.egg-info/**
+build/
