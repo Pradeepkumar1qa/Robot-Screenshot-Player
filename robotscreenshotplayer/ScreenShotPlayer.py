@@ -1,7 +1,7 @@
 from robot.libraries.BuiltIn import BuiltIn
 import os
 from shutil import copyfile,rmtree
-
+from pkg_resources import resource_string
 
 class ScreenShotPlayer(object):
     ROBOT_LISTENER_API_VERSION = 2
@@ -109,9 +109,11 @@ class ScreenShotPlayer(object):
             f.write('image_json_container1={}'.format(data))
         
 
-        resource_dir=__file__.replace('ScreenShotPlayer.py','resource')
-        copyfile(os.path.join(resource_dir,'style.css'),os.path.join(path_of_screen_shot_player,'style.css'))
-        copyfile(os.path.join(resource_dir,'controller.js'),os.path.join(path_of_screen_shot_player,'controller.js'))
+        # resource_dir=__file__.replace('ScreenShotPlayer.py','resource')
+        ScreenShotPlayer.createResourceCopy('style.css',path_of_screen_shot_player)
+        ScreenShotPlayer.createResourceCopy('controller.js',path_of_screen_shot_player)
+        # copyfile(os.path.join(resource_dir,'style.css'),os.path.join(path_of_screen_shot_player,'style.css'))
+        # copyfile(os.path.join(resource_dir,'controller.js'),os.path.join(path_of_screen_shot_player,'controller.js'))
 
 
         
@@ -143,5 +145,11 @@ class ScreenShotPlayer(object):
         ScreenShotPlayer.generateScreenShotPlayerResource(str(image_container))
         
         print("[robot-screenshot-player]:report saved at location:\t{}/{}".format(ScreenShotPlayer.ScreenShotPlayerReportDir,'ScreenShotPlayer.html'))
+    
+    @staticmethod
+    def createResourceCopy(resource_name,path_where_to_create):
+        with open(os.path.join(path_where_to_create,resource_name),'w') as f:
+            f.write(str(resource_string("resource",resource_name).decode()))
+       
 
 
