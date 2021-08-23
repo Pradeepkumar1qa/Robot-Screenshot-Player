@@ -3,3 +3,6 @@
 - completed work of 0.0.2 version
 - folder name changed
 - initial commit for 0.0.1
+
+-  Version  0.0.6
+       Fixed alert issue Not able to capture screenshot during javascript alert
