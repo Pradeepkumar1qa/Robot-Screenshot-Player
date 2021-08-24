@@ -47,7 +47,8 @@ class ScreenShotPlayer(object):
 
     @staticmethod
     def end_keyword(name, attributes):
-        print(attributes['status'])
+        pass
+        # print(attributes['status'])
         # pass
         # ScreenShotPlayer.start_keyword(name, attributes)
       
