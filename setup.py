@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="robot-screenshot-player",
-    version="0.0.6",
+    version="0.0.7",
     author="pradeep kumar",
     author_email="pradeepkmr838@gmail.com",
     description="utility for playing all the screentshot captured during robot execution",
